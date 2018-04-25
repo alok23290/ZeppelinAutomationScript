@@ -16,9 +16,11 @@ class Notebook(object):
 
     def getNotebookID(self):
         testURL="http://%s:%s/api/notebook" % (Notebook.host,Notebook.port)
-        print(testURL)
         r = requests.get(url=testURL)
         data = r.json()
+
+        print(data)
+
         json_data = data['body']
         subdict = {}
         for item in json_data:
@@ -26,4 +28,8 @@ class Notebook(object):
             new_value=item['name']
             subdict[new_key]=new_value
         return subdict
+
+
+
+
 
