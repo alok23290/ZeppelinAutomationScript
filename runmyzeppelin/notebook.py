@@ -19,17 +19,17 @@ class Notebook(object):
         r = requests.get(url=testURL)
         data = r.json()
 
-        print(data)
-
         json_data = data['body']
         subdict = {}
         for item in json_data:
             new_key=item['id']
-            new_value=item['name']
+            nameval= item['name']
+            if "/" in nameval:
+                new_value = item['name'].split("/")[-1]
+            else :
+                new_value = item['name']
+
             subdict[new_key]=new_value
+
         return subdict
-
-
-
-
 
