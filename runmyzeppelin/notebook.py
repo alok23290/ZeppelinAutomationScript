@@ -19,6 +19,8 @@ class Notebook(object):
         r = requests.get(url=testURL)
         data = r.json()
 
+        print(data)
+
         json_data = data['body']
         subdict = {}
         for item in json_data:
