@@ -1,6 +1,7 @@
 import requests
 
 class Notebook(object):
+
     host = ''
     port = ''
     def __init__(self):
@@ -14,24 +15,24 @@ class Notebook(object):
         except IOError:
             print("file not found")
 
-    def getNotebookID(self):
-        testURL="http://%s:%s/api/notebook" % (Notebook.host,Notebook.port)
-        r = requests.get(url=testURL)
-        data = r.json()
+    """
+    Below are the get and post request function
+    """
 
-        print(data)
+    def get_list_of_notes(self):
+        return "http://%s:%s/api/notebook" % (Notebook.host, Notebook.port)
 
-        json_data = data['body']
-        subdict = {}
-        for item in json_data:
-            new_key=item['id']
-            nameval= item['name']
-            if "/" in nameval:
-                new_value = item['name'].split("/")[-1]
-            else :
-                new_value = item['name']
+    def get_status_of_paragraphs(self):
+        pass
 
-            subdict[new_key]=new_value
+    def get_notebook_data(self):
+        return 'http://' + self.host + ":" + self.port + '/api/notebook/'
 
-        return subdict
+    def post_run_all_paragraphs(self):
+        return 'http://' + self.host + ":" + self.port + '/api/notebook/job/'
+
+    def post_paragraph_run_asynchronousely(self):
+        pass
+
+
 

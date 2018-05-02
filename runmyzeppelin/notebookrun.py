@@ -4,27 +4,30 @@ from runmyzeppelin.exception import MyExceptionWithContext
 
 class NbRun(object):
 
-    nbInfo = {}
-    host =''
-    port =''
     def __init__(self):
-        nb = Notebook()
-        self.nbInfo = nb.getNotebookID()
-        self.host = Notebook.host
-        self.port = Notebook.port
+        self.nb = Notebook()
 
-    # def nbExist(self):
-    #     try:
-    #         notebookImport = open("/Users/aloktiwari/PycharmProjects/ZeppelinAutomationScript/notebook_list")
-    #         for nblist in notebookImport:
-    #             if nblist.strip() in self.nbInfo.values():
-    #                 print("input notebook exist : "+ nblist.strip() )
-    #             else: raise MyExceptionWithContext()
-    #     except IOError:
-    #         print("Given File doesn't exist")
+    def getNotebookID(self):
+        getURL = self.nb.get_list_of_notes()
+        r = requests.get(url=getURL)
+        data = r.json()
+        json_data = data['body']
+        subdict = {}
+        for item in json_data:
+            new_key=item['id']
+            nameval= item['name']
+            if "/" in nameval:
+                new_value = item['name'].split("/")[-1]
+            else :
+                new_value = item['name']
+
+            subdict[new_key]=new_value
+        print(subdict)
+        return subdict
+
 
     def nbExist(self,inpNB):
-        if inpNB in self.nbInfo.values():
+        if inpNB in self.getNotebookID().values():
             print("input notebook exist : "+ inpNB )
         else:
             raise MyExceptionWithContext()
@@ -32,12 +35,12 @@ class NbRun(object):
     def nbRunPostRequest(self,nbName):
         self._nbID = ''
         self._nbName = ''
-        for id,name in  self.nbInfo.items():
+        for id,name in  self.getNotebookID().items():
             if name == nbName:
                 self._nbID = id
                 self._nbName = nbName
-        print('NOTEBOOK:'+self._nbName+'===>'+'http://'+self.host+":"+self.port+'/api/notebook/job/'+self._nbID)
-        return 'http://'+self.host+":"+self.port+'/api/notebook/job/'+self._nbID
+        # print(self.nb.post_run_all_paragraphs() + self._nbID)
+        return self.nb.post_run_all_paragraphs() + self._nbID
 
     def executePostRequest(self):
         inp_nb = open("/Users/aloktiwari/PycharmProjects/ZeppelinAutomationScript/notebook_list")
@@ -50,7 +53,5 @@ class NbRun(object):
                 r = requests.post(url=notebook_to_exexute)
                 data = r.json()
                 print(data)
-#
-# a = NbRun()
-# a.executePostRequest()
+
 
