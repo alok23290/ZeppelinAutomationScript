@@ -3,6 +3,7 @@ import requests
 from runmyzeppelin.notebook import Notebook
 from runmyzeppelin.notebookrun import NbRun
 import os
+import re
 
 class Extract(object):
 
@@ -28,7 +29,7 @@ class Extract(object):
     def script_name(self,content={}):
         json_data_1 = content['body']
         json_data_2 = json_data_1['name']
-        return json_data_2
+        return json_data_2+"."+self.nb1.code_lang
 
     def code_parser(self,content={}):
         print("****** PARSING BEGIN ******")
@@ -40,6 +41,25 @@ class Extract(object):
             if 'text' in item:
                 code_string += "\n"+"\n"+item['text']
         return code_string
+
+    # def flatten_dict(d):
+    #     def items():
+    #         for key, value in d.items():
+    #             if isinstance(value, dict):
+    #                 for subkey, subvalue in flatten_dict(value).items():
+    #                     yield key + "." + subkey, subvalue
+    #             else:
+    #                 yield key, value
+    #     return dict(items())
+    #
+    #
+    # def code_language(self,content={}):
+    #     print("****** PARSING BEGIN ******")
+    #     json_data_1 = content['body']
+    #     json_data_2 = json_data_1['paragraphs']
+    #
+    #     for item in json_data_2:
+
 
     def code_language(self):
 
@@ -91,12 +111,5 @@ class Extract(object):
                 print("STARTING CREATING CODE FILES")
 
                 self.create_code(parsed_data,input_script_name)
-
-
-c = Extract()
-
-c.executeGetRequest()
-
-
 
 

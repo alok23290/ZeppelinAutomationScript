@@ -4,6 +4,10 @@ class Notebook(object):
 
     host = ''
     port = ''
+    code_lang = ''
+
+    # IMPLEMENT ZEPPELIN SERVER PROPERTIES FILE AS DICTIONARY OBJECT
+
     def __init__(self):
         try:
             f = open("/Users/aloktiwari/PycharmProjects/ZeppelinAutomationScript/zeppelin-server.properties" , "r")
@@ -11,7 +15,9 @@ class Notebook(object):
             for line in f:
                 inpHostPort.append(line)
             Notebook.host = inpHostPort[0].split("=")[1].strip()
-            Notebook.port = inpHostPort[1].split("=")[1]
+            Notebook.port = inpHostPort[1].split("=")[1].strip()
+            Notebook.code_lang = inpHostPort[2].split("=")[1]
+
         except IOError:
             print("file not found")
 
