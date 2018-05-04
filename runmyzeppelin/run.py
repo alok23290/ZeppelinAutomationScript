@@ -8,10 +8,10 @@ class Run(object):
     if __name__ == "__main__":
         if sys.argv[1] == 'extract':
             c = Extract()
-            c.executeGetRequest()
+            c.execute_get_request()
         elif sys.argv[1] == 'notebook':
             d = NbRun()
-            d.executePostRequest()
+            d.execute_post_request()
         else : print("Given Mode is not defined " + sys.argv[1])
 
 

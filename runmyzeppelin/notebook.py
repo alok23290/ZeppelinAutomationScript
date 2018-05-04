@@ -21,23 +21,39 @@ class Notebook(object):
         except IOError:
             print("file not found")
 
-    """
-    Below are the get and post request function
-    """
-
     def get_list_of_notes(self):
+        """
+        GET method to list of all notebook present in zeppelin server
+        :return: string of GET URL
+        """
         return "http://%s:%s/api/notebook" % (Notebook.host, Notebook.port)
 
     def get_status_of_paragraphs(self):
+        """
+        GET method to know the status of all paragraph in zeppelin notebook
+        :return:
+        """
         pass
 
     def get_notebook_data(self):
+        """
+        GET method to fetch the notebook data
+        :return:
+        """
         return 'http://' + self.host + ":" + self.port + '/api/notebook/'
 
     def post_run_all_paragraphs(self):
+        """
+        POST method to run all paragraph synchronously
+        :return:
+        """
         return 'http://' + self.host + ":" + self.port + '/api/notebook/job/'
 
-    def post_paragraph_run_asynchronousely(self):
+    def post_paragraph_run_asynchronously(self):
+        """
+        POST method to run all paragraph asynchronously
+        :return:
+        """
         pass
 
 
