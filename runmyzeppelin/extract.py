@@ -6,9 +6,7 @@ import os
 
 class Extract(object):
 
-
     def __init__(self):
-        self.nb1 = Notebook()
         self.nbrun = NbRun()
 
 
@@ -25,8 +23,8 @@ class Extract(object):
                 self._nbID = id
                 self._nbName = nbName
         # return 'http://'+self.host+":"+self.port+'/api/notebook/'+self._nbID
-        print(self.nb1.get_notebook_data()+self._nbID)
-        return self.nb1.get_notebook_data()+self._nbID
+        print(self.nbrun.nb.get_notebook_data()+self._nbID)
+        return self.nbrun.nb.get_notebook_data()+self._nbID
 
 
     def script_name(self,content={}):
@@ -37,7 +35,7 @@ class Extract(object):
         """
         json_data_1 = content['body']
         json_data_2 = json_data_1['name']
-        return json_data_2+"."+self.nb1.code_lang
+        return json_data_2+"."+self.nbrun.nb.code_lang
 
 
     def code_parser(self,content={}):
@@ -99,7 +97,8 @@ class Extract(object):
         :return: None
         """
 
-        inp_nb = open("/Users/aloktiwari/PycharmProjects/ZeppelinAutomationScript/notebook_list")
+        inp_nb = open(self.nbrun.nb.user_notebook_path)
+
         for nb in inp_nb:
             l = nb.strip().split(",")
             for j in l:

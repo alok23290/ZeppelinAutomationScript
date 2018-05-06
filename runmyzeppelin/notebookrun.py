@@ -66,7 +66,7 @@ class NbRun(object):
         run the notebook using post method
         :return: None
         """
-        inp_nb = open("/Users/aloktiwari/PycharmProjects/ZeppelinAutomationScript/notebook_list")
+        inp_nb = open(self.nb.user_notebook_path)
         for nb in inp_nb:
             l = nb.strip().split(",")
             for j in l:
