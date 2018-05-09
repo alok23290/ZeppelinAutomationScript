@@ -88,7 +88,7 @@ class NbRun(object):
             time.sleep(3)
             self.get_recursive_paragraph_call(notebook_running)
         elif 'FINISHED' in paragraph_status:
-            print("All paragraph ran for " + )
+            print("All paragraph ran for " )
 
     def execute_post_request(self):
 
