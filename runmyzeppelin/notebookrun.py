@@ -75,9 +75,9 @@ class NbRun(object):
 
     def get_recursive_paragraph_call(self,notebook_running):
         """
-
+        this function is used to control the running of notebook.
         :param notebook_running:
-        :return:
+        :return:None
         """
 
         paragraph_status = self.get_custom_dag(notebook_running)
