@@ -1,10 +1,11 @@
 import requests
-
-from runmyzeppelin.notebook import Notebook
 from runmyzeppelin.notebookrun import NbRun
 import os
 
 class Extract(object):
+    """
+    By using this class we can extract the code present in zeppelin notebook into corresponding code files
+    """
 
     def __init__(self):
         self.nbrun = NbRun()
@@ -55,6 +56,18 @@ class Extract(object):
         return code_string
 
 
+    def extract_dependencies(self,code_string):
+        """
+        method used to extract all import statement
+        :param code_string:
+        :return: string
+        """
+        dependent_lib=''
+        for dependencies in code_string.split("\n"):
+            if "import" in dependencies:
+                dependent_lib += "\n"+dependencies
+        return dependent_lib
+
     def code_language(self):
 
         """
@@ -65,7 +78,7 @@ class Extract(object):
         pass
 
 
-    def create_code(self,code='',filename=''):
+    def create_code(self,code='',filename='',subdir=''):
         """
         method used to write the parsed zeppelin's notebook content into their respective code files
         :param code: string
@@ -75,14 +88,12 @@ class Extract(object):
 
         pwd = os.path.dirname(os.path.realpath(__file__))
         print("CURRENT DIRECTORY "+pwd)
-        subdir = "code"
+        # subdir = "code"
 
         filepath = os.path.join(pwd, subdir, filename)
 
         if not os.path.exists(os.path.join(pwd, subdir)):
             os.mkdir(os.path.join(pwd, subdir))
-
-        # create an empty file.
         try:
             f = open(filepath, 'w')
             f.write(code)
@@ -110,12 +121,10 @@ class Extract(object):
 
                 # print(code_data)
                 parsed_data=self.code_parser(code_data)
+                parsed_dependencies=self.extract_dependencies(parsed_data)
                 input_script_name= self.script_name(code_data)
-
-                print(input_script_name)
 
                 print("STARTING CREATING CODE FILES")
 
-                self.create_code(parsed_data,input_script_name)
-
-
+                self.create_code(parsed_data,input_script_name,'code')
+                self.create_code(parsed_dependencies,'import_statement.txt','dependencies')

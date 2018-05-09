@@ -1,6 +1,10 @@
 import os
 import configparser
-import requests
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M')
 
 class Notebook(object):
 
@@ -60,7 +64,7 @@ class Notebook(object):
         GET method to know the status of all paragraph in zeppelin notebook
         :return:
         """
-        pass
+        return "http://%s:%s/api/notebook/job/" % (self.host, self.port)
 
 
     def get_notebook_data(self):
