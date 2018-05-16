@@ -19,6 +19,7 @@ class Notebook(object):
         self.port = configuration['port']
         self.code_lang = configuration['code.language']
         self.user_notebook_path = configuration['notebook.path']
+        logging.info("notebook object created with host : " + self.host + ", port : " + self.port)
 
 
     def get_config_file_path(self):
@@ -27,14 +28,14 @@ class Notebook(object):
         :return: String
         """
         pwd = os.path.dirname(os.path.realpath(__file__))
-        print("CURRENT WORKING DIRECTORY  : " + pwd)
+        logging.info("current working directory to find SERVER.PROPERTIES file : " + pwd)
         config_file=''
         try:
             for files in os.listdir(pwd):
                 if files.endswith("properties"):
                     config_file += files
         except IOError:
-            print("config file doesn't exist at current working directory" + pwd)
+            logging.ERROR("config file doesn't exist at current working directory" + pwd)
         return pwd+"/"+config_file
 
 
@@ -47,7 +48,6 @@ class Notebook(object):
         config = configparser.RawConfigParser()
         config.read(config_file)
         details_dict = dict(config.items('SERVER'))
-        print(details_dict)
         return details_dict
 
 
@@ -89,3 +89,4 @@ class Notebook(object):
         :return:
         """
         pass
+

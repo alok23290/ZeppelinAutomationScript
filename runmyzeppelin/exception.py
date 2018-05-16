@@ -1,7 +1,7 @@
 """
 :custom exception class
 """
-class MyExceptionWithContext(Exception):
+class NotebookNotFound(Exception):
     def __init___(self):
-        Exception.__init__(self,"Input notebook doesn't exist on ZEPPELIN SERVER")
+        Exception.__init__(self)
 

@@ -1,7 +1,12 @@
 import requests
 import time
 from runmyzeppelin.notebook import Notebook
-from runmyzeppelin.exception import MyExceptionWithContext
+from runmyzeppelin.exception import NotebookNotFound
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M')
 
 class NbRun(object):
 
@@ -26,7 +31,6 @@ class NbRun(object):
             else :
                 new_value = item['name']
             subdict[new_key]=new_value
-        print(subdict)
         return subdict
 
 
@@ -37,9 +41,9 @@ class NbRun(object):
         :return: None
         """
         if inpNB in self.get_notebook_id().values():
-            print("input notebook exist : "+ inpNB)
+            logging.info("input notebook exist : "+ inpNB)
         else:
-            raise MyExceptionWithContext()
+            raise NotebookNotFound(logging.error("Input notebook "+ inpNB +" cannot be found on zeppelin server"))
 
 
     def get_post_request_url(self, nbName):
@@ -88,7 +92,7 @@ class NbRun(object):
             time.sleep(3)
             self.get_recursive_paragraph_call(notebook_running)
         elif 'FINISHED' in paragraph_status:
-            print("All paragraph ran for " )
+            logging.info("All paragraph ran for " + self._nbName)
 
     def execute_post_request(self):
 
@@ -101,13 +105,11 @@ class NbRun(object):
         inp_nb = open(self.nb.user_notebook_path)
         for nb in inp_nb:
             l = nb.strip().split(",")
-            print(l)
             for j in l:
                 self.is_notebook_exist(j)
                 notebook_to_execute=self.get_post_request_url(j)
-                print("**********NOTEBOOK RUN BEGINS**********")
+                logging.info("**********Notebook Execution Started***********")
                 r = requests.post(url=notebook_to_execute)
                 self.get_recursive_paragraph_call(notebook_to_execute)
-                data = r.json()
-                print(data)
+
 

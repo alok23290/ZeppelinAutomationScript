@@ -1,6 +1,11 @@
 import requests
 from runmyzeppelin.notebookrun import NbRun
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M')
 
 class Extract(object):
     """
@@ -23,8 +28,7 @@ class Extract(object):
             if name == nbName:
                 self._nbID = id
                 self._nbName = nbName
-        # return 'http://'+self.host+":"+self.port+'/api/notebook/'+self._nbID
-        print(self.nbrun.nb.get_notebook_data()+self._nbID)
+        logging.info("POST Request URL " + self.nbrun.nb.get_notebook_data()+self._nbID)
         return self.nbrun.nb.get_notebook_data()+self._nbID
 
 
@@ -45,7 +49,7 @@ class Extract(object):
         :param content: dict
         :return: string
         """
-        print("****** PARSING BEGIN ******")
+        logging.info("****** Parsing is strated ******")
         json_data_1 = content['body']
         json_data_2 = json_data_1['paragraphs']
 
@@ -87,9 +91,6 @@ class Extract(object):
         """
 
         pwd = os.path.dirname(os.path.realpath(__file__))
-        print("CURRENT DIRECTORY "+pwd)
-        # subdir = "code"
-
         filepath = os.path.join(pwd, subdir, filename)
 
         if not os.path.exists(os.path.join(pwd, subdir)):
@@ -99,7 +100,7 @@ class Extract(object):
             f.write(code)
             f.close()
         except IOError:
-            print("Wrong path provided")
+            logging.error("Wrong path provided")
 
 
     def execute_get_request(self):
@@ -115,16 +116,13 @@ class Extract(object):
             for j in l:
                 self.nbrun.is_notebook_exist(j)
                 notebook_to_exexute = self.nb_data_request(j)
-                print("**********NOTEBOOK CONTENT EXTRACTION BEGINS**********")
                 r = requests.get(url=notebook_to_exexute)
                 code_data = r.json()
-
-                # print(code_data)
                 parsed_data=self.code_parser(code_data)
                 parsed_dependencies=self.extract_dependencies(parsed_data)
                 input_script_name= self.script_name(code_data)
 
-                print("STARTING CREATING CODE FILES")
+                logging.info("genrating code directories")
 
-                self.create_code(parsed_data,input_script_name,'code')
-                self.create_code(parsed_dependencies,'import_statement.txt','dependencies')
+                self.create_code(parsed_data,input_script_name,'extracted_code')
+                self.create_code(parsed_dependencies,'import_statement.txt','dependencies_list')
